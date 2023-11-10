@@ -28,10 +28,7 @@ export default function Footer() {
           </button>
           <button
             onClick={() => {
-              window.open(
-                "https://github.com/ensarkr/random-objects-react",
-                "blank"
-              );
+              window.open("https://github.com/ensarkr/e-com-next", "blank");
             }}
           >
             <Image src={githubIcon} alt=""></Image>
