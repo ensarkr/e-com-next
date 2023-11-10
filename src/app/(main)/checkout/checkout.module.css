@@ -1,0 +1,116 @@
+.main {
+  height: var(--minContentHeight);
+  padding-top: 1rem;
+  box-sizing: border-box;
+}
+
+.checkout {
+  width: var(--contentWidth);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  padding-left: var(--contentLeftPadding);
+  min-height: calc(100% - 7.9rem);
+}
+
+.emptyMarket {
+  justify-content: center;
+}
+
+.bottomPart {
+  padding-left: calc(var(--contentLeftPadding));
+  position: sticky;
+  width: 100%;
+  height: 7.9rem;
+  bottom: 0;
+  box-sizing: border-box;
+  background-color: white;
+  border-top: 1px solid gray;
+  z-index: 6;
+}
+
+.innerBottomPart {
+  width: var(--contentWidth);
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+  z-index: 15;
+}
+
+.content,
+.slider {
+  width: calc(var(--contentWidth) - 50px);
+}
+
+.content {
+  z-index: 15;
+  background-color: white;
+  height: 100%;
+  box-shadow: 0 -1px 0 gray;
+  display: flex;
+  flex-direction: row;
+}
+
+.leftPart {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rightPart {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.addressDiv {
+  z-index: 4;
+  padding: 0.5rem;
+}
+
+.addressDiv > div {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.topInput {
+  flex: 1;
+}
+
+.paymentDiv {
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider {
+  position: absolute;
+  bottom: 0px;
+  transition: bottom 200ms ease-in-out;
+  height: 100%;
+  background-color: white;
+  border: 1px solid white;
+  box-sizing: border-box;
+}
+
+.showSlider {
+  bottom: 7.9rem;
+  border-color: gray;
+}
+
+@media only screen and (min-width: 800px) {
+  .content,
+  .slider {
+    width: calc(var(--orderWidth) + 15px);
+  }
+}

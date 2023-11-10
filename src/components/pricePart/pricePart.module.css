@@ -1,0 +1,24 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.main p {
+  margin: 0;
+}
+
+.single {
+  font-size: 200%;
+}
+
+.double > p:nth-child(1) {
+  /* percentage */
+  color: green;
+}
+.double > p:nth-child(2) {
+  /* old price */
+  color: red;
+  text-decoration: line-through;
+}

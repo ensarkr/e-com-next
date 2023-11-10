@@ -1,0 +1,18 @@
+.main {
+  padding-left: var(--contentLeftPadding);
+}
+
+.orders {
+  min-height: var(--minContentHeight);
+  padding: 1rem 0;
+  box-sizing: border-box;
+  width: var(--contentWidth);
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+}
+
+.emptyOrders {
+  justify-content: center;
+}

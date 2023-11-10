@@ -1,0 +1,9 @@
+.main {
+  display: flex;
+  min-height: var(--minContentHeight);
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+  padding: 0 2rem;
+}

@@ -1,0 +1,25 @@
+.rectButton,
+.rectAnchor {
+  font-family: inherit;
+  height: 2.4rem;
+  font-size: 1rem;
+  padding: 0 1rem;
+  background-color: white;
+  box-sizing: border-box;
+  border: 1px solid gray;
+  cursor: pointer;
+  min-width: max-content;
+}
+
+.rectButton:hover,
+.rectAnchor:hover {
+  box-shadow: 1px 1px #888888;
+}
+
+.rectAnchor {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: inherit;
+}

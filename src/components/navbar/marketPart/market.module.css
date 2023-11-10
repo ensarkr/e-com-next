@@ -1,0 +1,161 @@
+.market {
+  position: fixed;
+  z-index: 12;
+  right: -476px;
+  height: 100lvh;
+  width: 475px;
+  top: 0;
+  background-color: white;
+  border-left: 1px solid gray;
+  transition: right 200ms ease-in-out;
+}
+
+.bottomPart {
+  padding: 0.5em 1em;
+  padding-right: 5em;
+  position: fixed;
+  bottom: 0;
+  width: 475px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 50px;
+  border-top: 1px solid gray;
+  background-color: white;
+  right: -476px;
+  z-index: 13;
+  height: 50px;
+  transition: right 200ms ease-in-out;
+}
+
+.showMarket {
+  right: 0;
+}
+
+@media screen and (max-width: 475px) {
+  .market {
+    width: 100vw;
+  }
+
+  .bottomPart {
+    width: 100vw;
+  }
+}
+
+.fullScreen {
+  background-color: black;
+  opacity: 25%;
+  z-index: 11;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.topPart {
+  height: var(--navbarHeight);
+  border-bottom: 1px solid gray;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1em;
+}
+
+.title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.marketButton {
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* * also middle part */
+.itemsContainer {
+  height: calc(100dvh - 100px);
+  padding: 1em;
+  box-sizing: border-box;
+  overflow-y: overlay;
+  margin: 0;
+}
+
+.item {
+  height: 100px;
+  list-style: none;
+  margin-left: 0;
+  margin-bottom: 20px;
+  border: 1px solid gray;
+  border-width: 1px 0;
+  /* padding: 0.5em 0; */
+}
+
+.item:last-child {
+  margin-bottom: 0;
+}
+
+.itemTop {
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.itemBottom {
+  height: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.choices {
+  width: 30%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.colorDiv {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.colorBox {
+  height: 100%;
+  aspect-ratio: 1;
+  border: 1px solid gray;
+  box-sizing: border-box;
+}
+
+.emptyMarket {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.openButton {
+  position: relative;
+}
+
+.itemCount {
+  font-size: 0.9rem;
+  width: 1.3em;
+  height: 1.3em;
+  position: absolute;
+  border-radius: 50%;
+  background-color: white;
+  border: 1px solid gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: -0.4rem;
+  right: -0.5rem;
+}

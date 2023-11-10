@@ -1,0 +1,88 @@
+:root {
+  /* * including border */
+  --navbarHeight: 50px;
+  --navbarBorderColor: white;
+
+  --contentWidth: 75vw;
+  --minContentHeight: calc(100dvh - var(--navbarHeight));
+
+  /* * padding left used for centering content instead of flex */
+  /* * cause scroll bar causes sudden flicks on the contents */
+  --contentLeftPadding: calc((100vw - var(--contentWidth)) / 2);
+
+  /* * product card responsiveness */
+  --cardPerRow: 5;
+  /* ! calculated as gaps are 1vw between cards */
+  --cardWidth: calc(
+    (var(--contentWidth) - ((var(--cardPerRow) - 1) * 1vw)) / var(--cardPerRow)
+  );
+  --cardHeight: calc(var(--cardWidth) * 3 / 2);
+  --cardFontSize: 1rem;
+
+  /* * product checkout and order responsiveness */
+  --orderWidth: calc(var(--contentWidth) * 4 / 6);
+
+  --scroll: "scroll";
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  height: max-content;
+  color: black;
+}
+
+html {
+  /* * is used by popups for better UX */
+  overflow-y: var(--scroll);
+}
+
+@media only screen and (min-width: 0px) {
+  :root {
+    --cardPerRow: 1;
+    --contentWidth: 88vw;
+    font-size: 10px;
+    --orderWidth: calc(var(--contentWidth) * 7 / 8);
+  }
+}
+@media only screen and (min-width: 320px) {
+  :root {
+    font-size: 11px;
+  }
+}
+
+@media only screen and (min-width: 450px) {
+  :root {
+    --cardPerRow: 2;
+    font-size: 13px;
+    --contentWidth: 85vw;
+  }
+}
+
+@media only screen and (min-width: 800px) {
+  :root {
+    --cardPerRow: 3;
+    font-size: 16px;
+  }
+}
+@media only screen and (min-width: 1200px) {
+  :root {
+    --cardPerRow: 4;
+    --contentWidth: 80vw;
+    --orderWidth: calc(var(--contentWidth) * 4 / 6);
+  }
+}
+
+@media only screen and (min-width: 1600px) {
+  :root {
+    --cardPerRow: 4;
+    --contentWidth: 75vw;
+    --orderWidth: calc(var(--contentWidth) * 3 / 6);
+  }
+}
+
+@media only screen and (min-width: 1920px) {
+  :root {
+    --cardPerRow: 5;
+  }
+}

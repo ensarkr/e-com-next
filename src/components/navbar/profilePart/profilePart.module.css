@@ -1,0 +1,118 @@
+.profile {
+  position: fixed;
+  z-index: 12;
+  right: -476px;
+  height: 100lvh;
+  width: 475px;
+  top: 0;
+  background-color: white;
+  border-left: 1px solid gray;
+  transition: right 200ms ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.bottomPart {
+  padding: 0.5em 1em;
+  padding-right: 5em;
+  position: fixed;
+  bottom: 0;
+  width: 475px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 50px;
+  border-top: 1px solid gray;
+  background-color: white;
+  right: -476px;
+  z-index: 13;
+  height: 50px;
+  transition: right 200ms ease-in-out;
+}
+
+.showProfile {
+  right: 0;
+}
+
+@media screen and (max-width: 475px) {
+  .profile {
+    width: 100vw;
+  }
+
+  .bottomPart {
+    width: 100vw;
+  }
+}
+
+.fullScreen {
+  background-color: black;
+  opacity: 25%;
+  z-index: 11;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.topPart {
+  height: var(--navbarHeight);
+  border-bottom: 1px solid gray;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1em;
+}
+
+.title {
+  font-weight: 600;
+  margin: 0;
+}
+
+.profileButton {
+  border: none;
+  margin: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.contentPart {
+  padding: 1em;
+  box-sizing: border-box;
+  overflow-y: overlay;
+  margin: 0;
+}
+
+.wideButton {
+  font-family: inherit;
+  height: 2.4rem;
+  font-size: 1rem;
+  padding: 0 0;
+  background-color: white;
+  box-sizing: border-box;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: none;
+  color: black;
+  border: 0;
+}
+
+.wideButton:hover {
+  color: gray;
+}
+
+.contentTitle {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+.contentSubTitle {
+  margin-top: 0;
+  padding-left: 1rem;
+}

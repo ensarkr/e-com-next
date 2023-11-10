@@ -1,0 +1,18 @@
+.main {
+  margin-left: var(--contentLeftPadding);
+}
+
+.popularProducts {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  width: var(--contentWidth);
+  gap: 1vw;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  padding-bottom: 10rem;
+}
+
+.layout {
+  min-height: var(--minContentHeight);
+}
