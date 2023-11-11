@@ -33,9 +33,11 @@ export default function ProductCard({
               : { transform: `rotateY(180deg)` }
           }
         >
-          <Link href={"/products/" + productData.id} className={styles.imgDiv}>
+          {/* <Link href={"/products/" + productData.id} className={styles.imgDiv}> */}
+          <div className={styles.imgDiv}>
             <ProductImage imgName={productData.img}></ProductImage>
-          </Link>
+          </div>
+          {/* </Link> */}
           <div className={styles.frontBottom}>
             <h3 className={styles.title}>
               <Link href={"/products/" + productData.id}>
