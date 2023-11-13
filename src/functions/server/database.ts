@@ -1,6 +1,5 @@
 "use server-only";
 
-import { createClient } from "@supabase/supabase-js";
 import {
   convertDatabaseUserToUser,
   convertToOrderProducts,
@@ -11,9 +10,9 @@ import {
 } from "./convertData";
 import { doubleReturn } from "@/typings/globalTypes";
 import bcrypt from "bcrypt";
-import { marketProduct } from "../client/market";
 import { buyMarketRequestBody } from "@/app/api/buyMarket/route";
 import { orderProduct } from "@/components/productCardBig/ProductOrder";
+import database from "@/lib/database";
 
 // * all database fetching are done from here
 
@@ -95,16 +94,15 @@ export type passwordObjectT = {
 async function fetchProducts(
   limit?: number | undefined
 ): Promise<doubleReturn<productT[]>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
+  if (!databaseConnection.status)
     return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data: allProducts, error } = await supabase
     .from("product_datas")
@@ -125,16 +123,15 @@ async function fetchAllProducts() {
 }
 
 async function fetchPopularProducts(): Promise<doubleReturn<productT[]>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
+  if (!databaseConnection.status)
     return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data: allProducts, error } = await supabase
     .from("product_datas")
@@ -152,16 +149,15 @@ async function fetchPopularProducts(): Promise<doubleReturn<productT[]>> {
 async function fetchProduct(
   productId: number
 ): Promise<doubleReturn<productT>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
+  if (!databaseConnection.status)
     return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data: product, error } = await supabase
     .from("product_datas")
@@ -181,16 +177,15 @@ async function fetchUser(
   email: string,
   password: string
 ): Promise<doubleReturn<user>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data: user, error } = await supabase
     .from("users")
@@ -214,16 +209,15 @@ async function fetchUser(
 }
 
 async function fetchUser_ID(id: string): Promise<doubleReturn<user>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data: user, error } = await supabase
     .from("users")
@@ -242,16 +236,15 @@ async function fetchUser_ID(id: string): Promise<doubleReturn<user>> {
 async function fetchUserData(
   email: string
 ): Promise<doubleReturn<userPartial>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data: user, error } = await supabase
     .from("users")
@@ -268,16 +261,15 @@ async function fetchUserData(
 }
 
 async function doesUserExist(email: string): Promise<doubleReturn<boolean>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data, error } = await supabase
     .from("users")
@@ -302,16 +294,15 @@ async function doesUserExist(email: string): Promise<doubleReturn<boolean>> {
   }
 }
 async function createUser(user: user_FD): Promise<doubleReturn<"success">> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data, error } = await supabase.from("users").insert([
     {
@@ -336,16 +327,15 @@ async function editUser(
   newUserData: userPartial,
   email: string
 ): Promise<doubleReturn<user_JWT>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   const { data, error } = await supabase
     .from("users")
@@ -373,16 +363,15 @@ async function editUserPassword(
   passwordObject: passwordObjectT,
   email: string
 ): Promise<doubleReturn<"success">> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   let { data: checkUser, error: checkError } = await supabase
     .from("users")
@@ -427,16 +416,15 @@ async function addBoughtProducts(
   userEmail: string,
   options: buyMarketRequestBody
 ): Promise<doubleReturn<{ itemCount: number }>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   const { market, country, city, address } = options;
 
@@ -473,16 +461,15 @@ async function addBoughtProducts(
 async function fetchAllBoughtProducts(
   email: string
 ): Promise<doubleReturn<{ allBoughtProducts: Omit<orderProduct, "data">[] }>> {
-  const supaBaseUrl = process.env.SUPABASE_URL;
-  const supaBaseKey = process.env.SUPABASE_KEY;
+  const databaseConnection = await database.getDatabase();
 
-  if (supaBaseUrl === undefined || supaBaseKey === undefined)
-    return {
+  if (!databaseConnection.status)
+    return await {
       status: false,
-      message: "process environment variables could not be read",
+      message: databaseConnection.message,
     };
 
-  const supabase = createClient(supaBaseUrl, supaBaseKey);
+  const supabase = databaseConnection.value;
 
   const { data, error } = await supabase
     .from("bought_products")
