@@ -428,30 +428,43 @@ async function addBoughtProducts(
 
   const { market, country, city, address } = options;
 
-  for (let i = 0; i < market.length; i++) {
-    const productData = await fetchProduct(market[i].pid);
+  let { data: productsData, error: errorData } = await supabase
+    .from("product_datas")
+    .select("*")
+    .in("id", [market.map((item) => item.pid)]);
 
-    if (!productData.status)
-      return { status: false, message: productData.message };
+  if (errorData || productsData === null)
+    return {
+      status: false,
+      message: errorData
+        ? errorData.message
+        : "products fetching returned null",
+    };
 
-    const { data, error } = await supabase.from("bought_products").insert([
-      {
-        email: userEmail,
-        product_id: market[i].pid,
-        product_size: market[i].size,
-        product_color: market[i].color,
-        country: country,
-        city: city,
-        address: address,
-        bought_price: productData.value.price,
-        order_status: ["processing", "on the way", "received"][
-          Math.floor(Math.random() * 3)
-        ],
-      },
-    ]);
+  const { data, error: boughtError } = await supabase
+    .from("bought_products")
+    .insert(
+      market.map((marketItem) => {
+        return {
+          email: userEmail,
+          product_id: marketItem.pid,
+          product_size: marketItem.size,
+          product_color: marketItem.color,
+          country: country,
+          city: city,
+          address: address,
+          bought_price: (productsData as unknown as productT_DB[]).filter(
+            (databaseProduct) => databaseProduct.id === marketItem.pid
+          )[0].price,
+          order_status: ["processing", "on the way", "received"][
+            Math.floor(Math.random() * 3)
+          ],
+        };
+      })
+    );
 
-    if (error) return { status: false, message: error.message };
-  }
+  if (boughtError) return { status: false, message: boughtError.message };
+
   return {
     status: true,
     value: { itemCount: market.length },
