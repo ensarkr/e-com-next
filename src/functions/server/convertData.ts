@@ -58,7 +58,7 @@ const convertDatabaseUserToUser = (user: user_DB): user => {
 export type orderProduct_DB = {
   id: number;
   email: string;
-  created_at: string;
+  created_at: Date;
   product_id: number;
   product_size: sizesT;
   product_color: string;
@@ -72,6 +72,7 @@ export type orderProduct_DB = {
 const convertToOrderProducts = (
   boughtProductsDatabase: orderProduct_DB[]
 ): Omit<orderProduct, "data">[] => {
+  console.log(boughtProductsDatabase[0]);
   return boughtProductsDatabase.map((boughtProductDatabase) => {
     return {
       pid: boughtProductDatabase.product_id,
@@ -85,10 +86,11 @@ const convertToOrderProducts = (
   });
 };
 
-const convertDatabaseTime = (databaseTime: string) => {
-  const year = databaseTime.slice(0, 4);
-  const month = databaseTime.slice(5, 7);
-  const date = databaseTime.slice(8, 10);
+const convertDatabaseTime = (databaseTime: Date) => {
+  const databaseTimeString = databaseTime.toISOString();
+  const year = databaseTimeString.slice(0, 4);
+  const month = databaseTimeString.slice(5, 7);
+  const date = databaseTimeString.slice(8, 10);
   return date + "-" + month + "-" + year;
 };
 

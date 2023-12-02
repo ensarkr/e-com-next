@@ -14,4 +14,5 @@ https://e-com-next-lac.vercel.app/
 - React
 - Next
 - NextAuth
-- Supabase (only for database)
+- ~~Supabase (only for database)~~
+- Vercel Postgres
