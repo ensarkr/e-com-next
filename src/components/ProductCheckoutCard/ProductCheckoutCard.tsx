@@ -2,7 +2,7 @@
 
 import { marketProduct } from "@/functions/client/market";
 import { useMemo, useState } from "react";
-import styles from "./productCardBig.module.css";
+import styles from "./ProductCheckoutCard.module.css";
 import { productT } from "@/functions/server/database";
 import Image from "next/image";
 import PricePart from "../pricePart/PricePart";
@@ -16,7 +16,7 @@ export type productCheckoutProps = {
   removeFromMarketHigher: (productUID: string) => void;
 };
 
-export default function ProductCheckout({
+export default function ProductCheckoutCard({
   product,
   removeFromMarketHigher,
 }: productCheckoutProps) {

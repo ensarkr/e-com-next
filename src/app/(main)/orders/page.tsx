@@ -7,12 +7,10 @@ import {
 } from "@/functions/server/database";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from "next-auth";
-import ProductOrder, {
-  orderProduct,
-} from "@/components/productCardBig/ProductOrder";
 import { LinkButton } from "@/components/buttons/Buttons";
 import styles from "./orders.module.css";
 import { Metadata } from "next";
+import ProductOrderCard, { orderProduct } from "@/components/productOrderCard/productOrderCard";
 
 export const metadata: Metadata = {
   title: "MODA - ORDERS",
@@ -67,13 +65,13 @@ export default async function Orders() {
         ordersWithoutProductData.length > 0 &&
         allProducts.status ? (
           ordersWithoutProductData.map((e, i) => (
-            <ProductOrder
+            <ProductOrderCard
               key={i}
               product={{
                 ...e,
                 data: allProducts.value.filter((ie) => ie.id === e.pid)[0],
               }}
-            ></ProductOrder>
+            ></ProductOrderCard>
           ))
         ) : (
           <>

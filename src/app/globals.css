@@ -19,6 +19,9 @@
   --cardHeight: calc(var(--cardWidth) * 3 / 2);
   --cardFontSize: 1rem;
 
+  /* * big product card  */
+  --bigCardImageWidth: 250px;
+
   /* * product checkout and order responsiveness */
   --orderWidth: calc(var(--contentWidth) * 4 / 6);
 
@@ -42,12 +45,13 @@ html {
     --cardPerRow: 1;
     --contentWidth: 88vw;
     font-size: 10px;
-    --orderWidth: calc(var(--contentWidth) * 7 / 8);
+    --orderWidth: calc(var(--contentWidth) * 15 / 16);
   }
 }
-@media only screen and (min-width: 320px) {
+@media only screen and (min-width: 340px) {
   :root {
-    font-size: 11px;
+    --cardPerRow: 2;
+    font-size: 10px;
   }
 }
 
@@ -81,7 +85,7 @@ html {
   }
 }
 
-@media only screen and (min-width: 1920px) {
+@media only screen and (min-width: 1880px) {
   :root {
     --cardPerRow: 5;
   }

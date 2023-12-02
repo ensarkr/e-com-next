@@ -20,7 +20,7 @@ import {
   buyMarketResponse,
 } from "@/app/api/buyMarket/route";
 import { useRouter } from "next/navigation";
-import ProductCheckout from "@/components/productCardBig/ProductCheckout";
+import ProductCheckoutCard from "@/components/ProductCheckoutCard/ProductCheckoutCard";
 
 export default function CheckOutClient({
   userData,
@@ -53,7 +53,7 @@ export default function CheckOutClient({
       >
         {checkoutMarket.length > 0 ? (
           checkoutMarket.map((e) => (
-            <ProductCheckout
+            <ProductCheckoutCard
               key={e.uid}
               product={{
                 ...e,
@@ -65,7 +65,7 @@ export default function CheckOutClient({
                   pv.filter((e) => productUID !== e.uid)
                 );
               }}
-            ></ProductCheckout>
+            ></ProductCheckoutCard>
           ))
         ) : (
           <>
@@ -250,6 +250,7 @@ function CheckoutBottomPart({
               </>
             ) : componentState === "user" ? (
               <>
+                <div></div>
                 <CustomButton
                   title="next"
                   onClick={() => {

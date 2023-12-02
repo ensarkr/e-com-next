@@ -147,7 +147,7 @@
   border: 1px solid white;
   border-radius: 3px;
   padding: 0.2rem 0.3rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .bottom > button:hover {
@@ -203,4 +203,8 @@
   .button::before {
     display: none;
   }
+  .widthMargin{
+    margin-left: 20px;
+  }
+  
 }
