@@ -96,7 +96,7 @@ async function fetchAllProducts(): Promise<doubleReturn<productT[]>> {
   try {
     const { rows } = await sql`
     SELECT * FROM product_datas
-    ORDER BY id;`;
+    ORDER BY id`;
 
     return {
       status: true,
@@ -112,7 +112,7 @@ async function fetchPopularProducts(): Promise<doubleReturn<productT[]>> {
     const { rows } = await sql`
     SELECT * FROM product_datas
     ORDER BY popularity
-    LIMIT 9;`;
+    LIMIT 9`;
 
     return {
       status: true,
@@ -128,7 +128,7 @@ async function fetchProduct(
   try {
     const { rows } = await sql`
     SELECT * FROM product_datas
-    WHERE id = ${productId};`;
+    WHERE id = ${productId}`;
 
     if (rows.length === 0) {
       return { status: false, message: "Could not find the item." };
@@ -139,6 +139,7 @@ async function fetchProduct(
       value: convertToRealProduct(rows[0] as productT_DB),
     };
   } catch (error) {
+    console.log(error);
     return { status: false, message: (error as Error).message };
   }
 }
@@ -150,7 +151,7 @@ async function fetchUser(
   try {
     const { rows } = await sql`
     SELECT * FROM users
-    WHERE email = ${email};`;
+    WHERE email = ${email}`;
 
     if (rows.length === 0) {
       return { status: false, message: "Could not find the user." };
@@ -176,7 +177,7 @@ async function fetchUser_ID(id: string): Promise<doubleReturn<user>> {
   try {
     const { rows } = await sql`
     SELECT * FROM users
-    WHERE id = ${id};`;
+    WHERE id = ${id}`;
 
     if (rows.length === 0) {
       return { status: false, message: "Could not find the user." };
@@ -197,7 +198,7 @@ async function fetchUserData(
   try {
     const { rows } = await sql`
     SELECT * FROM users
-    WHERE email = ${email};`;
+    WHERE email = ${email}`;
 
     if (rows.length === 0) {
       return { status: false, message: "Could not find the user." };
@@ -216,7 +217,7 @@ async function doesUserExist(email: string): Promise<doubleReturn<boolean>> {
   try {
     const { rows } = await sql`
     SELECT * FROM users
-    WHERE email = ${email};`;
+    WHERE email = ${email}`;
 
     if (rows.length > 0) {
       return { status: true, value: true };
@@ -237,7 +238,7 @@ async function createUser(user: user_FD): Promise<doubleReturn<"success">> {
       ${await bcrypt.hash(user.password, 10)},
       ${user.country},
       ${user.city},
-      ${user.address});`;
+      ${user.address})`;
 
     if (rowCount === 1) {
       return { status: true, value: "success" };
@@ -286,7 +287,7 @@ async function editUserPassword(
 ): Promise<doubleReturn<"success">> {
   try {
     const { rows, rowCount: userCount } = await sql`
-    SELECT password_hash FROM users WHERE email = ${email};`;
+    SELECT password_hash FROM users WHERE email = ${email}`;
 
     if (userCount === 0) {
       return {
@@ -308,7 +309,7 @@ async function editUserPassword(
     UPDATE users 
     SET 
       password_hash = ${await bcrypt.hash(passwordObject.newPassword, 10)}
-    WHERE email = ${email};`;
+    WHERE email = ${email}`;
 
     if (rowCount === 1) {
       return {
@@ -380,7 +381,9 @@ async function fetchAllBoughtProducts(
 ): Promise<doubleReturn<{ allBoughtProducts: Omit<orderProduct, "data">[] }>> {
   try {
     const { rows } = await sql`
-    SELECT * FROM bought_products WHERE email = ${email};`;
+    SELECT * FROM bought_products WHERE email = ${email}`;
+
+    console.log(rows);
 
     return {
       status: true,

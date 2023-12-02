@@ -26,6 +26,18 @@ export default function MarketContextProvider({
 
     const market = getMarketFromLocalStorage();
     if (market.status && market.value.length !== 0) {
+      if (typeof market.value[0].pid === "string") {
+        // ! because of some database fetching mistakes
+        // ! some markets have pid as a string but it must be number
+        // ! code below turns all of them to number
+        market.value = market.value.map((marketItem) => {
+          return {
+            ...marketItem,
+            pid: parseInt(marketItem.pid as unknown as string),
+          };
+        });
+      }
+
       setMarket(market.value);
       updateCookieMarket(market.value);
     } else {
