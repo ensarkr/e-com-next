@@ -72,7 +72,6 @@ export type orderProduct_DB = {
 const convertToOrderProducts = (
   boughtProductsDatabase: orderProduct_DB[]
 ): Omit<orderProduct, "data">[] => {
-  console.log(boughtProductsDatabase[0]);
   return boughtProductsDatabase.map((boughtProductDatabase) => {
     return {
       pid: boughtProductDatabase.product_id,
