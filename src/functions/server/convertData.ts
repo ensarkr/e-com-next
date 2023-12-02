@@ -1,4 +1,4 @@
-import { orderProduct } from "@/components/productCardBig/ProductOrder";
+import { orderProduct } from "@/components/productOrderCard/productOrderCard";
 import {
   productT,
   productT_DB,

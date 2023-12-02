@@ -11,9 +11,9 @@ import {
 import { doubleReturn } from "@/typings/globalTypes";
 import bcrypt from "bcrypt";
 import { buyMarketRequestBody } from "@/app/api/buyMarket/route";
-import { orderProduct } from "@/components/productCardBig/ProductOrder";
 import { createClient, sql } from "@vercel/postgres";
 import format from "pg-format";
+import { orderProduct } from "@/components/productOrderCard/productOrderCard";
 
 // * all database fetching are done from here
 
