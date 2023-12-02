@@ -139,7 +139,6 @@ async function fetchProduct(
       value: convertToRealProduct(rows[0] as productT_DB),
     };
   } catch (error) {
-    console.log(error);
     return { status: false, message: (error as Error).message };
   }
 }
@@ -382,8 +381,6 @@ async function fetchAllBoughtProducts(
   try {
     const { rows } = await sql`
     SELECT * FROM bought_products WHERE email = ${email}`;
-
-    console.log(rows);
 
     return {
       status: true,
