@@ -86,7 +86,7 @@ const convertToOrderProducts = (
 };
 
 const convertDatabaseTime = (databaseTime: Date) => {
-  const databaseTimeString = databaseTime.toISOString();
+  const databaseTimeString = new Date(databaseTime).toISOString();
   const year = databaseTimeString.slice(0, 4);
   const month = databaseTimeString.slice(5, 7);
   const date = databaseTimeString.slice(8, 10);
