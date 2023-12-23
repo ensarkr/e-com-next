@@ -11,9 +11,8 @@ import {
 import { doubleReturn } from "@/typings/globalTypes";
 import bcrypt from "bcrypt";
 import { buyMarketRequestBody } from "@/app/api/buyMarket/route";
-import { createClient, sql } from "@vercel/postgres";
-import format from "pg-format";
 import { orderProduct } from "@/components/productOrderCard/productOrderCard";
+import database from "@/lib/Database";
 
 // * all database fetching are done from here
 
@@ -92,309 +91,417 @@ export type passwordObjectT = {
   reNewPassword: string;
 };
 
-async function fetchAllProducts(): Promise<doubleReturn<productT[]>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM product_datas
-    ORDER BY id`;
+async function fetchProducts(
+  limit?: number | undefined
+): Promise<doubleReturn<productT[]>> {
+  const databaseConnection = await database.getDatabase();
 
-    return {
-      status: true,
-      value: convertToRealProducts(rows as productT_DB[]),
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
     };
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+
+  const supabase = databaseConnection.value;
+
+  let { data: allProducts, error } = await supabase
+    .from("product_datas")
+    .select("*")
+    .order("id", { ascending: true })
+    .limit(limit === undefined ? 50 : limit);
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: convertToRealProducts(allProducts as productT_DB[]),
+  };
+}
+
+async function fetchAllProducts() {
+  return fetchProducts();
 }
 
 async function fetchPopularProducts(): Promise<doubleReturn<productT[]>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM product_datas
-    ORDER BY popularity
-    LIMIT 9`;
+  const databaseConnection = await database.getDatabase();
 
-    return {
-      status: true,
-      value: convertToRealProducts(rows as productT_DB[]),
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
     };
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+
+  const supabase = databaseConnection.value;
+
+  let { data: allProducts, error } = await supabase
+    .from("product_datas")
+    .select("*")
+    .order("popularity", { ascending: true })
+    .limit(9);
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: convertToRealProducts(allProducts as productT_DB[]),
+  };
 }
 async function fetchProduct(
   productId: number
 ): Promise<doubleReturn<productT>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM product_datas
-    WHERE id = ${productId}`;
+  const databaseConnection = await database.getDatabase();
 
-    if (rows.length === 0) {
-      return { status: false, message: "Could not find the item." };
-    }
-
-    return {
-      status: true,
-      value: convertToRealProduct(rows[0] as productT_DB),
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
     };
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+
+  const supabase = databaseConnection.value;
+
+  let { data: product, error } = await supabase
+    .from("product_datas")
+    .select("*")
+    .eq("id", productId)
+    .single();
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: convertToRealProduct(product as productT_DB),
+  };
 }
 
 async function fetchUser(
   email: string,
   password: string
 ): Promise<doubleReturn<user>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM users
-    WHERE email = ${email}`;
+  const databaseConnection = await database.getDatabase();
 
-    if (rows.length === 0) {
-      return { status: false, message: "Could not find the user." };
-    }
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
+    };
 
-    if (await bcrypt.compare(password, rows[0].password_hash)) {
-      return {
-        status: true,
-        value: convertDatabaseUserToUser(rows[0] as user_DB),
-      };
-    } else {
-      return {
-        status: false,
-        message: "Passwords does not match.",
-      };
-    }
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
+  const supabase = databaseConnection.value;
+
+  let { data: user, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .single();
+
+  if (error) return { status: false, message: error.message };
+
+  if (await bcrypt.compare(password, user.password_hash)) {
+    return {
+      status: true,
+      value: convertDatabaseUserToUser(user as user_DB),
+    };
+  } else {
+    return {
+      status: false,
+      message: "passwords does not match",
+    };
   }
 }
 
 async function fetchUser_ID(id: string): Promise<doubleReturn<user>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM users
-    WHERE id = ${id}`;
+  const databaseConnection = await database.getDatabase();
 
-    if (rows.length === 0) {
-      return { status: false, message: "Could not find the user." };
-    }
-
-    return {
-      status: true,
-      value: convertDatabaseUserToUser(rows[0] as user_DB),
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
     };
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+
+  const supabase = databaseConnection.value;
+
+  let { data: user, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: convertDatabaseUserToUser(user as user_DB),
+  };
 }
 
 async function fetchUserData(
   email: string
 ): Promise<doubleReturn<userPartial>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM users
-    WHERE email = ${email}`;
+  const databaseConnection = await database.getDatabase();
 
-    if (rows.length === 0) {
-      return { status: false, message: "Could not find the user." };
-    }
-
-    return {
-      status: true,
-      value: convertDatabaseUserToUser(rows[0] as user_DB),
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
     };
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+
+  const supabase = databaseConnection.value;
+
+  let { data: user, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .single();
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: convertUserToPartial(user),
+  };
 }
 
 async function doesUserExist(email: string): Promise<doubleReturn<boolean>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM users
-    WHERE email = ${email}`;
+  const databaseConnection = await database.getDatabase();
 
-    if (rows.length > 0) {
-      return { status: true, value: true };
-    } else {
-      return { status: true, value: false };
-    }
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
+    };
+
+  const supabase = databaseConnection.value;
+
+  let { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .single();
+
+  // * No rows returned code
+  if (error && error.code !== "PGRST116")
+    return { status: false, message: error.message };
+
+  if (data === null) {
+    return {
+      status: true,
+      value: false,
+    };
+  } else {
+    return {
+      status: true,
+      value: true,
+    };
   }
 }
 async function createUser(user: user_FD): Promise<doubleReturn<"success">> {
-  try {
-    const { rowCount } = await sql`
-    INSERT INTO users (full_name,email,password_hash,country,city,address) 
-    VALUES (
-      ${user.fullName},
-      ${user.email},
-      ${await bcrypt.hash(user.password, 10)},
-      ${user.country},
-      ${user.city},
-      ${user.address})`;
+  const databaseConnection = await database.getDatabase();
 
-    if (rowCount === 1) {
-      return { status: true, value: "success" };
-    } else {
-      return { status: false, message: "Unknown error occurred." };
-    }
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
+    };
+
+  const supabase = databaseConnection.value;
+
+  let { data, error } = await supabase.from("users").insert([
+    {
+      full_name: user.fullName,
+      email: user.email,
+      password_hash: await bcrypt.hash(user.password, 10),
+      country: user.country,
+      city: user.city,
+      address: user.address,
+    } as Omit<user_DB, "id">,
+  ]);
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: "success",
+  };
 }
 
 async function editUser(
   newUserData: userPartial,
   email: string
 ): Promise<doubleReturn<user_JWT>> {
-  try {
-    const { rowCount } = await sql`
-    UPDATE users 
-    SET 
-      full_name = ${newUserData.fullName},
-      email = ${newUserData.email},
-      country = ${newUserData.country},
-      city = ${newUserData.city},
-      address = ${newUserData.address}
-    WHERE email = ${email}`;
+  const databaseConnection = await database.getDatabase();
 
-    if (rowCount === 1) {
-      return {
-        status: true,
-        value: {
-          name: newUserData.fullName,
-          email: newUserData.email,
-        },
-      };
-    } else {
-      return { status: false, message: "Unknown error occurred." };
-    }
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
+    };
+
+  const supabase = databaseConnection.value;
+
+  const { data, error } = await supabase
+    .from("users")
+    .update({
+      full_name: newUserData.fullName,
+      email: newUserData.email,
+      country: newUserData.country,
+      city: newUserData.city,
+      address: newUserData.address,
+    })
+    .eq("email", email);
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: {
+      name: newUserData.fullName,
+      email: newUserData.email,
+    },
+  };
 }
 
 async function editUserPassword(
   passwordObject: passwordObjectT,
   email: string
 ): Promise<doubleReturn<"success">> {
-  try {
-    const { rows, rowCount: userCount } = await sql`
-    SELECT password_hash FROM users WHERE email = ${email}`;
+  const databaseConnection = await database.getDatabase();
 
-    if (userCount === 0) {
-      return {
-        status: false,
-        message: "User could not be found.",
-      };
-    }
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
+    };
 
-    if (
-      !(await bcrypt.compare(passwordObject.oldPassword, rows[0].password_hash))
-    ) {
-      return {
-        status: false,
-        message: "Wrong password.",
-      };
-    }
+  const supabase = databaseConnection.value;
 
-    const { rowCount } = await sql`
-    UPDATE users 
-    SET 
-      password_hash = ${await bcrypt.hash(passwordObject.newPassword, 10)}
-    WHERE email = ${email}`;
+  let { data: checkUser, error: checkError } = await supabase
+    .from("users")
+    .select("*")
+    .eq("email", email)
+    .single();
 
-    if (rowCount === 1) {
-      return {
-        status: true,
-        value: "success",
-      };
-    } else {
-      return { status: false, message: "Unknown error occurred." };
-    }
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
+  if (checkError)
+    return {
+      status: false,
+      message:
+        checkError.code === "PGRST116"
+          ? "user does not exist"
+          : checkError.message,
+    };
+
+  const verifyResult = await bcrypt.compare(
+    passwordObject.oldPassword,
+    checkUser.password_hash
+  );
+
+  if (!verifyResult) {
+    return { status: false, message: "wrong password" };
   }
+
+  const { data, error } = await supabase
+    .from("users")
+    .update({
+      password_hash: await bcrypt.hash(passwordObject.newPassword, 5),
+    })
+    .eq("email", email);
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: "success",
+  };
 }
 
 async function addBoughtProducts(
   userEmail: string,
   options: buyMarketRequestBody
 ): Promise<doubleReturn<{ itemCount: number }>> {
-  try {
-    const client = createClient();
-    client.connect();
+  const databaseConnection = await database.getDatabase();
 
-    const { rows: product_datas } = await client.query(
-      format("SELECT * FROM product_datas WHERE id IN %L", [
-        [options.market.map((item) => item.pid)],
-      ])
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
+    };
+
+  const supabase = databaseConnection.value;
+
+  const { market, country, city, address } = options;
+
+  let { data: productsData, error: errorData } = await supabase
+    .from("product_datas")
+    .select("*")
+    .in("id", [market.map((item) => item.pid)]);
+
+  if (errorData || productsData === null)
+    return {
+      status: false,
+      message: errorData
+        ? errorData.message
+        : "products fetching returned null",
+    };
+
+  const { data, error: boughtError } = await supabase
+    .from("bought_products")
+    .insert(
+      market.map((marketItem) => {
+        return {
+          email: userEmail,
+          product_id: marketItem.pid,
+          product_size: marketItem.size,
+          product_color: marketItem.color,
+          country: country,
+          city: city,
+          address: address,
+          bought_price: (productsData as unknown as productT_DB[]).filter(
+            (databaseProduct) => databaseProduct.id === marketItem.pid
+          )[0].price,
+          order_status: ["processing", "on the way", "received"][
+            Math.floor(Math.random() * 3)
+          ],
+        };
+      })
     );
 
-    const { rowCount } = await client.query(
-      format(
-        "INSERT INTO bought_products (email, product_id, product_size, product_color, country, city, address, bought_price, order_status) VALUES %L",
-        options.market.map((item) => {
-          const productData = (product_datas as productT_DB[]).filter(
-            (e) => e.id === item.pid
-          )[0];
+  if (boughtError) return { status: false, message: boughtError.message };
 
-          return [
-            userEmail,
-            productData.id,
-            item.size,
-            item.color,
-            options.country,
-            options.city,
-            options.address,
-            productData.price,
-            ["processing", "on the way", "received"][
-              Math.floor(Math.random() * 3)
-            ],
-          ];
-        })
-      )
-    );
-
-    if (rowCount === 0) {
-      return {
-        status: false,
-        message: "Unknown error occurred.",
-      };
-    } else {
-      return { status: true, value: { itemCount: rowCount } };
-    }
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+  return {
+    status: true,
+    value: { itemCount: market.length },
+  };
 }
 
 async function fetchAllBoughtProducts(
   email: string
 ): Promise<doubleReturn<{ allBoughtProducts: Omit<orderProduct, "data">[] }>> {
-  try {
-    const { rows } = await sql`
-    SELECT * FROM bought_products WHERE email = ${email}`;
+  const databaseConnection = await database.getDatabase();
 
-    return {
-      status: true,
-      value: {
-        allBoughtProducts: convertToOrderProducts(rows as orderProduct_DB[]),
-      },
+  if (!databaseConnection.status)
+    return await {
+      status: false,
+      message: databaseConnection.message,
     };
-  } catch (error) {
-    return { status: false, message: (error as Error).message };
-  }
+
+  const supabase = databaseConnection.value;
+
+  const { data, error } = await supabase
+    .from("bought_products")
+    .select("*")
+    .eq("email", email);
+
+  if (error) return { status: false, message: error.message };
+
+  return {
+    status: true,
+    value: {
+      allBoughtProducts: convertToOrderProducts(data as orderProduct_DB[]),
+    },
+  };
 }
 
 export {
   fetchAllProducts,
+  fetchProducts,
   fetchPopularProducts,
   fetchProduct,
   fetchUser,

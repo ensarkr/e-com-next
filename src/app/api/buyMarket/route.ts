@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createHash } from "crypto";
 import {
-  createDoubleCSRF,
   removeCSRFToken,
   verifyDoubleSignedSubmit,
 } from "@/functions/server/csrf";
