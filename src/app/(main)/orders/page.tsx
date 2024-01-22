@@ -1,16 +1,12 @@
 "use server-only";
 
-import {
-  fetchAllBoughtProducts,
-  fetchAllProducts,
-  fetchUserData,
-} from "@/functions/server/database";
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { getServerSession } from "next-auth";
 import { LinkButton } from "@/components/buttons/Buttons";
 import styles from "./orders.module.css";
 import { Metadata } from "next";
 import ProductOrderCard, { orderProduct } from "@/components/productOrderCard/productOrderCard";
+import { fetchAllBoughtProducts, fetchAllProducts, fetchUserData } from "@/functions/server/database";
 
 export const metadata: Metadata = {
   title: "MODA - ORDERS",
