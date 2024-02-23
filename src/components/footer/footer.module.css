@@ -1,7 +1,7 @@
 .footer {
-  height: 200px;
+  height: 220px;
   background-color: black;
-  padding-left: var(--contentLeftPadding);
+  padding: 0 0 1.5rem var(--contentLeftPadding);
 }
 
 .innerFooter {
@@ -10,19 +10,10 @@
   color: white;
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  gap: 5vw;
+  align-items: flex-end;
 }
 
-.innerFooter > div {
-  max-width: 250px;
-}
-
-.innerFooter > div > p {
-  color: gray;
-}
-
-.innerFooter > div > button {
+.innerFooter > button {
   background: none;
   border: none;
   color: inherit;
@@ -31,5 +22,15 @@
   text-decoration: none;
   cursor: pointer;
   padding: 0;
-  margin: 0 0.5rem 0 0;
+  margin: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  justify-content: center;
+}
+
+.innerFooter > button > svg {
+  width: 80%;
+  height: 80%;
+  fill: white;
 }

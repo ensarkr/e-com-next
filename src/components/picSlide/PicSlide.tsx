@@ -19,14 +19,14 @@ export default function PicSlide() {
 
   const [orientation, setOrientation] = useState<"wide" | "tall">("wide");
   const [slideType, setSlideType] = useState<"scroll" | "time">("scroll");
-  const [slidePosition, setSlidePosition] = useState<"fixed" | "absolute">(
-    "fixed"
-  );
+  const [slidePosition, setSlidePosition] = useState<
+    "fixed" | "absolute" | "initial"
+  >("initial");
   const isMobile = slideType === "time";
   const [activeImg, setActiveImg] = useState(1);
 
   useEffect(() => {
-    const isMobileRecent = /Android|iPhone/i.test(navigator.userAgent);
+    // const isMobileRecent = /Android|iPhone/i.test(navigator.userAgent);
 
     const getOrientation = () =>
       window.innerHeight / window.innerWidth > 1.2 ? "tall" : "wide";
@@ -37,21 +37,21 @@ export default function PicSlide() {
 
     correctOrientation();
 
-    if (isMobileRecent) {
-      setSlideType("time");
-      setSlidePosition("absolute");
+    // if (isMobileRecent) {
+    //   setSlideType("time");
+    //   setSlidePosition("absolute");
 
-      const slideInterval = setInterval(() => {
-        setActiveImg((pv) => ((pv + 1) % 3) + 1);
-      }, 2000);
+    //   const slideInterval = setInterval(() => {
+    //     setActiveImg((pv) => ((pv + 1) % 3) + 1);
+    //   }, 2000);
 
-      window.addEventListener("resize", correctOrientation);
+    //   window.addEventListener("resize", correctOrientation);
 
-      return () => {
-        clearInterval(slideInterval);
-        window.removeEventListener("resize", correctOrientation);
-      };
-    } else {
+    //   return () => {
+    //     clearInterval(slideInterval);
+    //     window.removeEventListener("resize", correctOrientation);
+    //   };
+    // } else {
       setSlidePosition("fixed");
 
       const getImageNumber = () => {
@@ -70,6 +70,7 @@ export default function PicSlide() {
         }
       };
 
+      correctAll();
       document.addEventListener("scroll", correctAll);
       window.addEventListener("resize", correctAll);
 
@@ -77,7 +78,7 @@ export default function PicSlide() {
         document.removeEventListener("scroll", correctAll);
         window.removeEventListener("resize", correctAll);
       };
-    }
+    // }
   }, []);
 
   const shouldShowImage = (
@@ -101,6 +102,8 @@ export default function PicSlide() {
           className={
             slidePosition === "absolute"
               ? styles.sliderAbsolute
+              : slidePosition === "initial"
+              ? styles.sliderInitial
               : styles.sliderFixed
           }
         >

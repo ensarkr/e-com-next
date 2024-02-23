@@ -12,6 +12,7 @@
   height: calc(200vh - var(--navbarHeight));
 }
 
+.sliderInitial,
 .sliderAbsolute,
 .sliderFixed {
   display: flex;
@@ -22,10 +23,16 @@
   width: var(--contentWidth);
 }
 
+.sliderInitial {
+  position: absolute;
+  top: calc(-1 * var(--navbarHeight));
+}
+
 .sliderAbsolute {
   position: absolute;
   bottom: 0;
 }
+
 .sliderFixed {
   position: fixed;
   top: 0;
@@ -45,7 +52,6 @@
   opacity: 0;
   transition: opacity 200ms ease-in;
   z-index: 4;
-
 }
 
 .showImage {
@@ -55,7 +61,6 @@
 .imgDiv:nth-child(1) {
   left: 58%;
   width: 60%;
-  
 }
 .imgDiv:nth-child(2),
 .imgDiv:nth-child(3) {
