@@ -1,7 +1,7 @@
 .footer {
   height: 220px;
   background-color: black;
-  padding: 0 0 1.5rem var(--contentLeftPadding);
+  padding: 0 0 1.8rem var(--contentLeftPadding);
 }
 
 .innerFooter {
@@ -11,6 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  gap: 1.5rem;
 }
 
 .innerFooter > button {
@@ -23,14 +24,14 @@
   cursor: pointer;
   padding: 0;
   margin: 0;
-  width: 2rem;
-  height: 2rem;
+  width: 1.7rem;
+  height: 1.7rem;
   display: flex;
   justify-content: center;
 }
 
 .innerFooter > button > svg {
-  width: 80%;
-  height: 80%;
+  width: 100%;
+  height: 100%;
   fill: white;
 }
